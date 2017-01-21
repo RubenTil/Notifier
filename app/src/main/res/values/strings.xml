@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Notifier</string>
+
+    <!--Navigation-->
+    <string name="header_overview">Overzicht</string>
+    <string name="header_timeline">Tijdlijn</string>
+    <string name="header_new_notification">Nieuwe Notificatie</string>
+    <string name="openDrawer">open drawer</string>
+    <string name="closeDrawer">close drawer</string>
+
 </resources>
