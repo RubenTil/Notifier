@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+
+    <TextView
+        android:text="Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="13dp"
+        android:id="@+id/listItemTitle"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="Details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/listItemTitle"
+        android:layout_marginTop="20dp"
+        android:id="@+id/listItemDetails" />
+
+    <TextView
+        android:text="RepeatMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listItemRepeat"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/listItemTitle"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:text="ShowTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp"
+        android:id="@+id/listItemShowTime" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listItemEnabled"
+        android:layout_alignTop="@+id/listItemDetails"
+        android:layout_alignEnd="@+id/listItemShowTime"
+        android:layout_marginTop="4dp"/>
+
+</RelativeLayout>

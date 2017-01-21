@@ -1,4 +1,4 @@
-package nl.hsleiden.notifier;
+package nl.hsleiden.notifier.Activity;
 
 import android.support.annotation.LayoutRes;
 import android.support.v4.widget.DrawerLayout;
@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.design.widget.NavigationView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nl.hsleiden.notifier.R;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -53,11 +53,6 @@ public class BaseActivity extends AppCompatActivity {
             // This method will trigger on item Click of navigation menu
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-
-                //Checking if the item is in checked state or not, if not make it in checked state
-                if(menuItem.isChecked()) menuItem.setChecked(false);
-                else menuItem.setChecked(true);
 
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
