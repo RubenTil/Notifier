@@ -9,11 +9,13 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,9 +30,9 @@ import butterknife.ButterKnife;
 import nl.hsleiden.notifier.Model.Notification;
 import nl.hsleiden.notifier.R;
 
-public class NewNotificationActivity extends BaseActivity {
+public class NotificationActivity extends BaseActivity {
 
-    static NewNotificationView newNotificationView;
+    static NotificationView notificationView;
 
     Notification notification;
 
@@ -49,7 +51,7 @@ public class NewNotificationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_notification);
         toolbar.setTitle(R.string.header_new_notification);
-        newNotificationView = new NewNotificationView(view_stub);
+        notificationView = new NotificationView(view_stub);
 
         fragmentManager = getFragmentManager();
 
@@ -59,26 +61,31 @@ public class NewNotificationActivity extends BaseActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.repeatmode_dropdown, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        newNotificationView.repeatOptionsDropdown.setAdapter(adapter);
+        notificationView.repeatOptionsDropdown.setAdapter(adapter);
 
-        if( getIntent().hasExtra("Notification")){
-            notification = (Notification) getIntent().getSerializableExtra("Notification");
-            newNotificationView.titleField.setText(notification.title);
-            newNotificationView.detailsField.setText(notification.details);
+        if( getIntent().hasExtra("NotificationID")){
+            notification = Notification.load(Notification.class, getIntent().getLongExtra("NotificationID", 0));
+//            notification = (Notification) getIntent().getSerializableExtra("Notification");
+            Log.d("adapter", "Id = " + notification.getId());
+            notificationView.titleField.setText(notification.title);
+            notificationView.detailsField.setText(notification.details);
             selectedTime = notification.initialShowTime;
+            timeIsSelected=true;
+            notificationView.isEnabled.setChecked(notification.isEnabled);
+
 
             switch (notification.repeatMode){
                 case NO_REPEAT:
-                    newNotificationView.repeatOptionsDropdown.setSelection(R.string.repeatmode_no_repeat);
+                    notificationView.repeatOptionsDropdown.setSelection(dropdownOptions.indexOf(getResources().getString(R.string.repeatmode_no_repeat)));
                     break;
                 case DAILY:
-                    newNotificationView.repeatOptionsDropdown.setSelection(R.string.repeatmode_daily);
+                    notificationView.repeatOptionsDropdown.setSelection(dropdownOptions.indexOf(getResources().getString(R.string.repeatmode_daily)));
                     break;
                 case WEEKLY:
-                    newNotificationView.repeatOptionsDropdown.setSelection(R.string.repeatmode_weekly);
+                    notificationView.repeatOptionsDropdown.setSelection(dropdownOptions.indexOf(getResources().getString(R.string.repeatmode_weekly)));
                     break;
                 case MONTHLY:
-                    newNotificationView.repeatOptionsDropdown.setSelection(R.string.repeatmode_monthly);
+                    notificationView.repeatOptionsDropdown.setSelection(dropdownOptions.indexOf(getResources().getString(R.string.repeatmode_monthly)));
                     break;
 
             }
@@ -89,32 +96,34 @@ public class NewNotificationActivity extends BaseActivity {
             notification = new Notification("", "", R.drawable.ic_feedback_black_24dp, DateTime.now(), Notification.RepeatMode.NO_REPEAT, true);
             selectedTime = notification.initialShowTime;
         }
-        newNotificationView.dateTimeField.setText(selectedTime.toString("dd-MM-YYYY HH:mm"));
+        notificationView.dateTimeField.setText(selectedTime.toString("dd-MM-YYYY HH:mm"));
 
     }
 
     public void confirmCreation(View v) {
-        if(newNotificationView.titleField.getText().toString().equals("") && !timeIsSelected){
+        if(notificationView.titleField.getText().toString().equals("") || !timeIsSelected){
             Toast.makeText(this, "Please select a time and/or enter a title", Toast.LENGTH_LONG);
+            Log.d(getClass().getName(), "Please select a time and/or enter a title");
             return;
         }
-        notification.title = newNotificationView.titleField.getText().toString();
-        notification.details = newNotificationView.detailsField.getText().toString();
+        notification.title = notificationView.titleField.getText().toString();
+        notification.details = notificationView.detailsField.getText().toString();
         notification.initialShowTime = selectedTime;
 
-        if (((String) newNotificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_no_repeat)))
+        if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_no_repeat)))
                 notification.repeatMode = Notification.RepeatMode.NO_REPEAT;
-        else if (((String) newNotificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_daily)))
+        else if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_daily)))
                 notification.repeatMode = Notification.RepeatMode.DAILY;
-        else if (((String) newNotificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_weekly)))
+        else if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_weekly)))
                 notification.repeatMode = Notification.RepeatMode.WEEKLY;
-        else if (((String) newNotificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_monthly)))
+        else if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_monthly)))
                 notification.repeatMode = Notification.RepeatMode.MONTHLY;
 
-        notification.isEnabled = true;
+        notification.isEnabled = notificationView.isEnabled.isChecked();
 
+        notification.save();
         Intent i = new Intent();
-        i.putExtra("Notification", notification);
+//        i.putExtra("Notification", notification);
         setResult(Activity.RESULT_OK, i);
         finish();
     }
@@ -154,7 +163,7 @@ public class NewNotificationActivity extends BaseActivity {
             selectedTime = selectedTime.hourOfDay().setCopy(hourOfDay);
             selectedTime = selectedTime.minuteOfHour().setCopy(minute);
             timeIsSelected = true;
-            newNotificationView.dateTimeField.setText(selectedTime.toString("dd-MM-YYYY HH:mm"));
+            notificationView.dateTimeField.setText(selectedTime.toString("dd-MM-YYYY HH:mm"));
         }
     }
 
@@ -182,7 +191,7 @@ public class NewNotificationActivity extends BaseActivity {
     }
 
 
-    static class NewNotificationView {
+    static class NotificationView {
 
         @BindView(R.id.titleField)
         EditText titleField;
@@ -192,8 +201,10 @@ public class NewNotificationActivity extends BaseActivity {
         TextView dateTimeField;
         @BindView(R.id.repeatOptionsDropDown)
         Spinner repeatOptionsDropdown;
+        @BindView(R.id.isEnabled)
+        Switch isEnabled;
 
-        NewNotificationView(View v) {
+        NotificationView(View v) {
             ButterKnife.bind(this, v);
         }
     }

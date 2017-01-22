@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.hsleiden.notifier.Activity.NewNotificationActivity">
+    tools:context="nl.hsleiden.notifier.Activity.NotificationActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:text="@string/str_confirm"
+            android:text="@string/view_save"
             android:textColor="@android:color/white"
             android:textSize="24dp"
             android:textStyle="bold"
@@ -46,14 +46,15 @@
 
         <EditText
             android:id="@+id/titleField"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="11dp"
             android:ems="10"
             android:hint="Title"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/detailsField"
@@ -75,8 +76,9 @@
             android:layout_below="@+id/detailsField"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="10dp"
-            android:textSize="16dp"
-            android:onClick="showDatePickerDialog"/>
+            android:textSize="18sp"
+            android:onClick="showDatePickerDialog"
+            android:text="dd/MM/YYYY HH:mm" />
 
         <Spinner
             android:id="@+id/repeatOptionsDropDown"
@@ -85,5 +87,15 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/dateTimeField"
             android:layout_marginTop="16dp" />
+
+        <Switch
+            android:text="@string/view_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/isEnabled"
+            android:layout_alignTop="@+id/titleField"
+            android:layout_alignEnd="@+id/dateTimeField"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium" />
     </RelativeLayout>
 </LinearLayout>
