@@ -1,23 +1,28 @@
 package nl.hsleiden.notifier.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.ListView;
 
+import com.activeandroid.query.Select;
+
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import nl.hsleiden.notifier.Model.MainNotification;
+import nl.hsleiden.notifier.Model.Notification;
 import nl.hsleiden.notifier.R;
 
 
 public class OverviewActivity extends BaseActivity {
 
     OverviewView view;
-    ArrayList<MainNotification> mainNotifications;
+    List<Notification> notifications;
+    NotificationListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +31,30 @@ public class OverviewActivity extends BaseActivity {
         toolbar.setTitle(R.string.header_overview);
         view = new OverviewView(view_stub);
 
-        mainNotifications = new ArrayList<>();
+        notifications = new Select()
+                .from(Notification.class)
+                .execute();
 
-        mainNotifications.add(new MainNotification("titles", "detail blabla", R.drawable.ic_feedback_black_24dp, DateTime.now(), MainNotification.RepeatMode.NO_REPEAT, null, null, true  ));
-        mainNotifications.add(new MainNotification("titles", "detail blabla", R.drawable.ic_feedback_black_24dp, DateTime.now(), MainNotification.RepeatMode.NO_REPEAT, null, null, false  ));
-        mainNotifications.add(new MainNotification("titles", "detail blabla", R.drawable.ic_feedback_black_24dp, DateTime.now(), MainNotification.RepeatMode.NO_REPEAT, null, null, true));
-
-        NotificationListAdapter adapter = new NotificationListAdapter(this, R.id.notificationList, mainNotifications);
+        adapter = new NotificationListAdapter(this, R.id.notificationList, notifications);
         view.notificationList.setAdapter(adapter);
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+
+            Notification newNotification = (Notification) data.getSerializableExtra("Notification");
+            newNotification.save();
+            adapter.add(newNotification);
+        }
+    }
+
+    public void openAddNotificationView(View v) {
+        Intent i = new Intent();
+        i.setClass(this, NewNotificationActivity.class);
+        this.startActivityForResult(i, 1);
     }
 
     static class OverviewView {
@@ -43,7 +62,10 @@ public class OverviewActivity extends BaseActivity {
         @BindView(R.id.notificationList)
         ListView notificationList;
 
-        public OverviewView(View view) {
+        @BindView(R.id.addNotificationFab)
+        FloatingActionButton addNotificationFab;
+
+        OverviewView(View view) {
             ButterKnife.bind(this, view);
         }
     }

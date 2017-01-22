@@ -13,8 +13,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nl.hsleiden.notifier.Model.Notification;
 import nl.hsleiden.notifier.R;
-import nl.hsleiden.notifier.Model.MainNotification;
 
 /**
  * Created by Ruben van Til on 21-1-2017.
@@ -22,14 +22,14 @@ import nl.hsleiden.notifier.Model.MainNotification;
 
 public class NotificationListAdapter extends ArrayAdapter {
 
-    public NotificationListAdapter(Context context, int resource, List<MainNotification> objects) {
+    public NotificationListAdapter(Context context, int resource, List<Notification> objects) {
         super(context, resource, objects);
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MainNotification item = (MainNotification) getItem(position);
+        Notification item = (Notification) getItem(position);
         final ViewHolder holder;
 
         // Check if an existing view is being reused, otherwise inflate the view
