@@ -101,9 +101,8 @@ public class NotificationActivity extends BaseActivity {
     }
 
     public void confirmCreation(View v) {
-        if(notificationView.titleField.getText().toString().equals("") || !timeIsSelected){
-            Toast.makeText(this, "Please select a time and/or enter a title", Toast.LENGTH_LONG);
-            Log.d(getClass().getName(), "Please select a time and/or enter a title");
+        if(notificationView.titleField.getText().toString().trim().isEmpty() || !timeIsSelected){
+            Toast.makeText(getApplicationContext(), "Please select a time and/or enter a title", Toast.LENGTH_LONG).show();
             return;
         }
         notification.title = notificationView.titleField.getText().toString();
