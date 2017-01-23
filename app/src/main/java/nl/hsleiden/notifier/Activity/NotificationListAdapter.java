@@ -106,7 +106,7 @@ public class NotificationListAdapter extends ArrayAdapter {
     }
 
     private void setAlarm(Notification notification) {
-        Intent i = new Intent(context, NotificationService.class);
+        Intent i = new Intent(context.getApplicationContext(), NotificationService.class);
         i.putExtra("NotificationID", notification.getId());
 
         int pendingID = new BigDecimal(notification.getId()).intValueExact();
@@ -130,9 +130,10 @@ public class NotificationListAdapter extends ArrayAdapter {
     }
 
     private void stopAlarm(Notification notification){
-        Intent intent = new Intent(context, NotificationService.class);
+        Intent intent = new Intent(context.getApplicationContext(), NotificationService.class);
+        intent.putExtra("NotificationID", notification.getId());
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), new BigDecimal(notification.getId()).intValueExact() , intent, PendingIntent.FLAG_UPDATE_CURRENT|  Intent.FILL_IN_DATA);
+        PendingIntent pendingIntent = PendingIntent.getService(context.getApplicationContext(), new BigDecimal(notification.getId()).intValueExact() , intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
         Log.d("Adapter", "Alarm stopped");
     }

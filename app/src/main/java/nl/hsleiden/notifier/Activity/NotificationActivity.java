@@ -51,6 +51,7 @@ public class NotificationActivity extends BaseActivity {
     static FragmentManager fragmentManager;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +133,7 @@ public class NotificationActivity extends BaseActivity {
     }
 
     private void setAlarm() {
-        Intent i = new Intent(getBaseContext(), NotificationService.class);
+        Intent i = new Intent(getApplicationContext(), NotificationService.class);
         i.putExtra("NotificationID", notification.getId());
 
         int pendingID = new BigDecimal(notification.getId()).intValueExact();
@@ -157,9 +158,10 @@ public class NotificationActivity extends BaseActivity {
     }
 
     private void stopAlarm(){
-        Intent intent = new Intent(this, NotificationService.class);
+        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+        intent.putExtra("NotificationID", notification.getId());
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), new BigDecimal(notification.getId()).intValueExact() , intent, PendingIntent.FLAG_UPDATE_CURRENT|  Intent.FILL_IN_DATA);
+        PendingIntent pendingIntent = PendingIntent.getService(this.getApplicationContext(), new BigDecimal(notification.getId()).intValueExact() , intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
 
         Log.d("Notificationactivity", "Alarm stopped");
