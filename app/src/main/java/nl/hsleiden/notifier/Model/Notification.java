@@ -38,7 +38,6 @@ public class Notification extends Model implements Serializable{
     @Column(name ="repeat_mode")
     public RepeatMode repeatMode;
 
-    @Expose
     @Column(name ="is_enabled")
     public Boolean isEnabled;
 
@@ -46,6 +45,7 @@ public class Notification extends Model implements Serializable{
 
     public Notification(){
         super();
+        isEnabled=false;
     }
 
     public Notification(String title, String details, int icon, DateTime initialShowTime, RepeatMode repeatMode, Boolean isEnabled) {
