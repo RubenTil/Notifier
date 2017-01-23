@@ -1,5 +1,6 @@
 package nl.hsleiden.notifier.Activity;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -57,19 +58,29 @@ public class BaseActivity extends AppCompatActivity {
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
 
+                Intent i = new Intent();
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()){
 
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_overview:
-                        Toast.makeText(getApplicationContext(),"Overview Selected",Toast.LENGTH_SHORT).show();
+                        i.setClass(getBaseContext(), OverviewActivity.class);
+                        startActivity(i);
                         return true;
 
                     // For rest of the options we just show a toast on click
 
-                    case R.id.nav_timeline:
-                        Toast.makeText(getApplicationContext(),"Timeline Selected",Toast.LENGTH_SHORT).show();
+                    case R.id.nav_import:
+                        i.setClass(getBaseContext(), ImportActivity.class);
+                        startActivity(i);
+                        return true;
+
+                    case R.id.nav_export:
+                        i.setClass(getBaseContext(), ExportActivity.class);
+                        startActivity(i);
                         return true;
                 }
             return false;

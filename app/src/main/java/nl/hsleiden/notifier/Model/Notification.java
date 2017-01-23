@@ -4,6 +4,7 @@ package nl.hsleiden.notifier.Model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.Expose;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -17,21 +18,27 @@ import java.io.Serializable;
 @Table(name="Notifications")
 public class Notification extends Model implements Serializable{
 
+    @Expose
     @Column(name ="title")
     public String title;
 
+    @Expose
     @Column(name ="details")
     public String details;
 
+    @Expose
     @Column(name ="icon")
     public int icon;
 
+    @Expose
     @Column(name ="initial_show_time")
     public DateTime initialShowTime;
 
+    @Expose
     @Column(name ="repeat_mode")
     public RepeatMode repeatMode;
 
+    @Expose
     @Column(name ="is_enabled")
     public Boolean isEnabled;
 

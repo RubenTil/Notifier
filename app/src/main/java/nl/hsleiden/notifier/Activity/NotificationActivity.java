@@ -135,6 +135,7 @@ public class NotificationActivity extends BaseActivity {
     private void setAlarm() {
         Intent i = new Intent(getApplicationContext(), NotificationService.class);
         i.putExtra("NotificationID", notification.getId());
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         int pendingID = new BigDecimal(notification.getId()).intValueExact();
         PendingIntent pi = PendingIntent.getService(getBaseContext(), pendingID, i, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -160,6 +161,7 @@ public class NotificationActivity extends BaseActivity {
     private void stopAlarm(){
         Intent intent = new Intent(getApplicationContext(), NotificationService.class);
         intent.putExtra("NotificationID", notification.getId());
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getService(this.getApplicationContext(), new BigDecimal(notification.getId()).intValueExact() , intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
