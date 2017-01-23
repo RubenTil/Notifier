@@ -35,6 +35,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.NotificationActivity"></activity>
+
+
+        <service android:name=".Service.NotificationService"></service>
     </application>
 
 </manifest>

@@ -16,13 +16,11 @@
     <string name="repeatmode_no_repeat">Geen Herhaling</string>
     <string name="repeatmode_daily">Dagelijks Herhalen</string>
     <string name="repeatmode_weekly">Wekelijks Herhalen</string>
-    <string name="repeatmode_monthly">Maandelijks Herhalen</string>
 
     <string-array name="repeatmode_dropdown">
         <item>Geen Herhaling</item>
         <item>Dagelijks Herhalen</item>
         <item>Wekelijks Herhalen</item>
-        <item>Maandelijks Herhalen</item>
     </string-array>
 
 </resources>

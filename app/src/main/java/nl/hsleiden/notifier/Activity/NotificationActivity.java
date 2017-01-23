@@ -1,11 +1,14 @@
 package nl.hsleiden.notifier.Activity;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.hsleiden.notifier.Model.Notification;
 import nl.hsleiden.notifier.R;
+import nl.hsleiden.notifier.Service.NotificationService;
 
 public class NotificationActivity extends BaseActivity {
 
@@ -41,9 +46,9 @@ public class NotificationActivity extends BaseActivity {
     static DateTime selectedTime;
     static boolean timeIsSelected;
 
+    boolean isNewNotification; //Not editing a notification, but creating one.
+
     static FragmentManager fragmentManager;
-
-
 
 
     @Override
@@ -63,18 +68,19 @@ public class NotificationActivity extends BaseActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         notificationView.repeatOptionsDropdown.setAdapter(adapter);
 
-        if( getIntent().hasExtra("NotificationID")){
+        if (getIntent().hasExtra("NotificationID")) {
+            isNewNotification = false;
             notification = Notification.load(Notification.class, getIntent().getLongExtra("NotificationID", 0));
 //            notification = (Notification) getIntent().getSerializableExtra("Notification");
             Log.d("adapter", "Id = " + notification.getId());
             notificationView.titleField.setText(notification.title);
             notificationView.detailsField.setText(notification.details);
             selectedTime = notification.initialShowTime;
-            timeIsSelected=true;
+            timeIsSelected = true;
             notificationView.isEnabled.setChecked(notification.isEnabled);
 
 
-            switch (notification.repeatMode){
+            switch (notification.repeatMode) {
                 case NO_REPEAT:
                     notificationView.repeatOptionsDropdown.setSelection(dropdownOptions.indexOf(getResources().getString(R.string.repeatmode_no_repeat)));
                     break;
@@ -84,14 +90,11 @@ public class NotificationActivity extends BaseActivity {
                 case WEEKLY:
                     notificationView.repeatOptionsDropdown.setSelection(dropdownOptions.indexOf(getResources().getString(R.string.repeatmode_weekly)));
                     break;
-                case MONTHLY:
-                    notificationView.repeatOptionsDropdown.setSelection(dropdownOptions.indexOf(getResources().getString(R.string.repeatmode_monthly)));
-                    break;
 
             }
 
-        }
-        else{
+        } else {
+            isNewNotification = true;
             //create dummy object
             notification = new Notification("", "", R.drawable.ic_feedback_black_24dp, DateTime.now(), Notification.RepeatMode.NO_REPEAT, true);
             selectedTime = notification.initialShowTime;
@@ -101,7 +104,7 @@ public class NotificationActivity extends BaseActivity {
     }
 
     public void confirmCreation(View v) {
-        if(notificationView.titleField.getText().toString().trim().isEmpty() || !timeIsSelected){
+        if (notificationView.titleField.getText().toString().trim().isEmpty() || !timeIsSelected) {
             Toast.makeText(getApplicationContext(), "Please select a time and/or enter a title", Toast.LENGTH_LONG).show();
             return;
         }
@@ -110,33 +113,69 @@ public class NotificationActivity extends BaseActivity {
         notification.initialShowTime = selectedTime;
 
         if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_no_repeat)))
-                notification.repeatMode = Notification.RepeatMode.NO_REPEAT;
+            notification.repeatMode = Notification.RepeatMode.NO_REPEAT;
         else if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_daily)))
-                notification.repeatMode = Notification.RepeatMode.DAILY;
+            notification.repeatMode = Notification.RepeatMode.DAILY;
         else if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_weekly)))
-                notification.repeatMode = Notification.RepeatMode.WEEKLY;
-        else if (((String) notificationView.repeatOptionsDropdown.getSelectedItem()).equals(getResources().getString(R.string.repeatmode_monthly)))
-                notification.repeatMode = Notification.RepeatMode.MONTHLY;
+            notification.repeatMode = Notification.RepeatMode.WEEKLY;
 
         notification.isEnabled = notificationView.isEnabled.isChecked();
 
         notification.save();
+
+        if(notification.isEnabled) setAlarm();
+        else if(!isNewNotification) stopAlarm();
+
         Intent i = new Intent();
-//        i.putExtra("Notification", notification);
         setResult(Activity.RESULT_OK, i);
         finish();
     }
 
-    public void cancelCreation(View v){
-        onBackPressed();
+    private void setAlarm() {
+        Intent i = new Intent(getBaseContext(), NotificationService.class);
+        i.putExtra("NotificationID", notification.getId());
+
+        int pendingID = new BigDecimal(notification.getId()).intValueExact();
+        PendingIntent pi = PendingIntent.getService(getBaseContext(), pendingID, i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+
+        switch(notification.repeatMode){
+            case NO_REPEAT:
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, notification.initialShowTime.getMillis(), pi);
+                break;
+            case DAILY:
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, notification.initialShowTime.getMillis(),AlarmManager.INTERVAL_DAY ,  pi);
+                break;
+            case WEEKLY:
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, notification.initialShowTime.getMillis(),AlarmManager.INTERVAL_DAY * 7,  pi);
+                break;
+        }
+
+        Log.d("Notificationactivity", "Alarm set at " + notification.initialShowTime.toString("HH:mm:ss"));
     }
 
+    private void stopAlarm(){
+        Intent intent = new Intent(this, NotificationService.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), new BigDecimal(notification.getId()).intValueExact() , intent, PendingIntent.FLAG_UPDATE_CURRENT|  Intent.FILL_IN_DATA);
+        alarmManager.cancel(pendingIntent);
+
+        Log.d("Notificationactivity", "Alarm stopped");
+    }
+
+
+    public void cancelCreation(View v) {
+        onBackPressed();
+    }
 
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(fragmentManager, "datePicker");
     }
+
     static void showTimePickerDialog() {
         DialogFragment timePickerFragment = new TimePickerFragment();
         timePickerFragment.show(fragmentManager, "timePicker");
@@ -173,7 +212,7 @@ public class NotificationActivity extends BaseActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
             int year = selectedTime.getYear();
-            int month = selectedTime.getMonthOfYear();
+            int month = selectedTime.getMonthOfYear() - 1; // -1 because different indexes
             int day = selectedTime.getDayOfMonth();
 
             // Create a new instance of DatePickerDialog and return it
@@ -183,7 +222,7 @@ public class NotificationActivity extends BaseActivity {
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
             selectedTime = selectedTime.year().setCopy(year);
-            selectedTime = selectedTime.monthOfYear().setCopy(month);
+            selectedTime = selectedTime.monthOfYear().setCopy(month+1); // -1 because different indexes
             selectedTime = selectedTime.dayOfMonth().setCopy(day);
             showTimePickerDialog();
         }

@@ -1,5 +1,6 @@
 package nl.hsleiden.notifier.Model;
 
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -34,7 +35,7 @@ public class Notification extends Model implements Serializable{
     @Column(name ="is_enabled")
     public Boolean isEnabled;
 
-    public enum RepeatMode{ DAILY, WEEKLY, MONTHLY, NO_REPEAT }
+    public enum RepeatMode{ DAILY, WEEKLY, NO_REPEAT }
 
     public Notification(){
         super();

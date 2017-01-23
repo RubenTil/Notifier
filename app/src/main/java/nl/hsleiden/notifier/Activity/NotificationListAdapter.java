@@ -1,5 +1,7 @@
 package nl.hsleiden.notifier.Activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -13,12 +15,14 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.hsleiden.notifier.Model.Notification;
 import nl.hsleiden.notifier.R;
+import nl.hsleiden.notifier.Service.NotificationService;
 
 /**
  * Created by Ruben van Til on 21-1-2017.
@@ -64,9 +68,6 @@ public class NotificationListAdapter extends ArrayAdapter {
             case WEEKLY:
                 holder.repeatMode.setText(R.string.repeatmode_weekly);
                 break;
-            case MONTHLY:
-                holder.repeatMode.setText(R.string.repeatmode_monthly);
-                break;
 
         }
 
@@ -94,11 +95,46 @@ public class NotificationListAdapter extends ArrayAdapter {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 item.isEnabled = b;
                 item.save();
+
+                if(b) setAlarm(item);
+                else stopAlarm(item);
             }
         });
 
 
         return convertView;
+    }
+
+    private void setAlarm(Notification notification) {
+        Intent i = new Intent(context, NotificationService.class);
+        i.putExtra("NotificationID", notification.getId());
+
+        int pendingID = new BigDecimal(notification.getId()).intValueExact();
+        PendingIntent pi = PendingIntent.getService(context, pendingID, i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+
+        switch(notification.repeatMode){
+            case NO_REPEAT:
+                alarmManager.set(AlarmManager.RTC_WAKEUP, notification.initialShowTime.getMillis(), pi);
+                break;
+            case DAILY:
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, notification.initialShowTime.getMillis(),AlarmManager.INTERVAL_DAY ,  pi);
+                break;
+            case WEEKLY:
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, notification.initialShowTime.getMillis(),AlarmManager.INTERVAL_DAY * 7,  pi);
+                break;
+        }
+        Log.d("Adapter", "Alarm set");
+    }
+
+    private void stopAlarm(Notification notification){
+        Intent intent = new Intent(context, NotificationService.class);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), new BigDecimal(notification.getId()).intValueExact() , intent, PendingIntent.FLAG_UPDATE_CURRENT|  Intent.FILL_IN_DATA);
+        alarmManager.cancel(pendingIntent);
+        Log.d("Adapter", "Alarm stopped");
     }
 
     static class ViewHolder {
