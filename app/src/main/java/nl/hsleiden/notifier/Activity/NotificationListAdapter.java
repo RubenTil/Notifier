@@ -85,6 +85,8 @@ public class NotificationListAdapter extends ArrayAdapter {
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(item.isEnabled)
+                    stopAlarm(item);
                 remove(item);
                 item.delete();
             }
