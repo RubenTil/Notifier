@@ -1,63 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:clickable="true">
+    android:layout_height="wrap_content">
 
-
-    <TextView
-        android:text="Title"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="13dp"
-        android:id="@+id/listItemTitle"
-        android:textStyle="bold" />
+        android:background="@drawable/list_item_rounded_corner"
+        android:clickable="true"
+        android:padding="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:text="Details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/listItemTitle"
-        android:layout_marginTop="20dp"
-        android:id="@+id/listItemDetails" />
 
-    <TextView
-        android:text="RepeatMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listItemRepeat"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/listItemTitle"
-        android:layout_marginTop="40dp"/>
+        <TextView
+            android:id="@+id/listItemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="13dp"
+            android:text="Title"
+            android:textColor="@color/lightgrey"
+            android:textStyle="bold" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_delete"
-        android:layout_alignBottom="@+id/listItemEnabled"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/deleteButton" />
+        <TextView
+            android:id="@+id/listItemDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/listItemTitle"
+            android:layout_marginTop="20dp"
+            android:text="Details"
+            android:textColor="@color/lightgrey" />
 
-    <TextView
-        android:text="ShowTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/deleteButton"
-        android:layout_marginEnd="11dp"
-        android:id="@+id/listItemShowTime" />
+        <TextView
+            android:id="@+id/listItemRepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/listItemTitle"
+            android:layout_marginTop="40dp"
+            android:text="RepeatMode"
+            android:textColor="@color/lightgrey" />
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listItemEnabled"
-        android:layout_alignTop="@+id/listItemDetails"
-        android:layout_alignEnd="@+id/listItemShowTime"
-        android:layout_marginTop="4dp"/>
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/listItemEnabled"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:padding="5dp"
+            android:tint="@color/lightgrey"
+            app:srcCompat="@drawable/ic_delete_black_24dp" />
 
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/listItemEnabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/listItemDetails"
+            android:layout_toStartOf="@id/deleteButton"
+            android:background="@null"
+            android:padding="5dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="15dp"
+            android:tint="@color/lightgrey"
+            app:srcCompat="@drawable/ic_notifications_off_black_24dp" />
+
+        <TextView
+            android:id="@+id/listItemShowTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="ShowTime"
+            android:textColor="@color/lightgrey" />
+
+    </RelativeLayout>
+</LinearLayout>

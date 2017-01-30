@@ -15,7 +15,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:tint="@android:color/white"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:srcCompat="@drawable/ic_add_black_24dp"
         android:onClick="openAddNotificationView"/>
 
     <ListView
@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         android:id="@+id/notificationList"
         android:layout_gravity="start|top"
-        android:clickable="false"/>
+        android:clickable="false"
+        android:divider="#fff"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,7 +42,7 @@ public class NotificationListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Notification item = (Notification) getItem(position);
-        ViewHolder holder;
+        final ViewHolder holder;
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView != null) {
@@ -55,7 +56,15 @@ public class NotificationListAdapter extends ArrayAdapter {
         holder.title.setText(item.title);
         holder.details.setText(item.details);
         holder.showTime.setText(item.initialShowTime.toString("dd-MM HH:mm"));
-        holder.Enabled.setChecked(item.isEnabled);
+        if(item.isEnabled) {
+            holder.Enabled.setImageDrawable(getContext().getDrawable(R.drawable.ic_notifications_active_black_24dp));
+//            holder.Enabled.setColorFilter(R.color.colorAccent);
+        }
+        else {
+            holder.Enabled.setImageDrawable(getContext().getDrawable(R.drawable.ic_notifications_off_black_24dp));
+//            holder.Enabled.setColorFilter(R.color.lightgrey);
+        }
+
 
 
         switch (item.repeatMode) {
@@ -92,13 +101,20 @@ public class NotificationListAdapter extends ArrayAdapter {
             }
         });
 
-        holder.Enabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.Enabled.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                item.isEnabled = b;
-                item.save();
+            public void onClick(View view) {
+                if(item.isEnabled){
+                    item.isEnabled = false;
+                    holder.Enabled.setImageDrawable(getContext().getDrawable(R.drawable.ic_notifications_off_black_24dp));
+//                    holder.Enabled.setColorFilter(R.color.lightgrey);
+                } else {
+                    item.isEnabled = true;
+                    holder.Enabled.setImageDrawable(getContext().getDrawable(R.drawable.ic_notifications_active_black_24dp));
+//                    holder.Enabled.setColorFilter(R.color.colorAccent);
+                }
 
-                if(b) setAlarm(item);
+                if(item.isEnabled) setAlarm(item);
                 else stopAlarm(item);
             }
         });
@@ -157,7 +173,7 @@ public class NotificationListAdapter extends ArrayAdapter {
         TextView repeatMode;
 
         @BindView(R.id.listItemEnabled)
-        Switch Enabled;
+        ImageButton Enabled;
 
         @BindView(R.id.deleteButton)
         ImageButton deleteButton;

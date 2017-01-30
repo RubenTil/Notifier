@@ -5,20 +5,21 @@
     <item
         android:id="@+id/nav_overview"
         android:checked="false"
-        android:title="@string/header_overview" />
-        <!--android:icon="@drawable/ic_inbox_black"-->
+        android:title="@string/header_overview"
+        android:icon="@drawable/ic_view_list_black_24dp"/>
+
 
     <item
         android:id="@+id/nav_import"
         android:checked="false"
-        android:title="@string/header_import" />
-        <!--android:icon="@drawable/ic_star_black"-->
+        android:title="@string/header_import"
+        android:icon="@drawable/ic_file_download_black_24dp"/>
 
     <item
         android:id="@+id/nav_export"
         android:checked="false"
-        android:title="@string/header_export" />
-        <!--android:icon="@drawable/ic_star_black"-->
+        android:title="@string/header_export"
+        android:icon="@drawable/ic_file_upload_black_24dp"/>
 
     </group>
 </menu>
