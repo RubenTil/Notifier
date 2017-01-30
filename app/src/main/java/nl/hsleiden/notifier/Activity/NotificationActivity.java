@@ -97,7 +97,7 @@ public class NotificationActivity extends BaseActivity {
         } else {
             isNewNotification = true;
             //create dummy object
-            notification = new Notification("", "", R.drawable.ic_feedback_black_24dp, DateTime.now(), Notification.RepeatMode.NO_REPEAT, true);
+            notification = new Notification("", "", DateTime.now(), Notification.RepeatMode.NO_REPEAT, true);
             selectedTime = notification.initialShowTime;
         }
         notificationView.dateTimeField.setText(selectedTime.toString("dd-MM-YYYY HH:mm"));

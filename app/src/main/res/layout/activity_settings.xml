@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_export"
+    android:id="@+id/activity_import"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="nl.hsleiden.notifier.Activity.ExportActivity">
+    tools:context="nl.hsleiden.notifier.Activity.SettingsActivity">
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="82dp"
-        android:id="@+id/exportField"
+        android:id="@+id/importField"
         android:layout_alignParentEnd="true"
-        android:visibility="gone"/>
+        android:hint="@string/view_url_hint" />
 
     <Button
-        android:text="Export Notifications"
+        android:text="@string/view_import"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/exportBtn"
+        android:id="@+id/importButton"
+        android:onClick="importItems"
+        android:layout_below="@+id/importField"
+        android:layout_centerHorizontal="true" />
+
+
+    <Button
+        android:text="@string/view_export"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/importField"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/exportButton"
         android:onClick="exportItems"/>
 </RelativeLayout>

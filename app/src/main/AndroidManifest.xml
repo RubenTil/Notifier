@@ -38,8 +38,7 @@
 
         <service android:name=".Service.NotificationService" />
 
-        <activity android:name=".Activity.ImportActivity" />
-        <activity android:name=".Activity.ExportActivity"></activity>
+        <activity android:name=".Activity.SettingsActivity" />
     </application>
 
 </manifest>

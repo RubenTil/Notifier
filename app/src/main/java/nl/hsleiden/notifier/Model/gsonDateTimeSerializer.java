@@ -9,6 +9,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -21,18 +23,12 @@ import java.util.Date;
 public class gsonDateTimeSerializer implements JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
     @Override
     public JsonElement serialize(DateTime src, Type srcType, JsonSerializationContext context) {
-        return new JsonPrimitive(src.toString());
+        return new JsonPrimitive(src.toString("yyyy-MM-dd HH:mm:ss"));
     }
 
     @Override
     public DateTime deserialize(JsonElement json, Type type, JsonDeserializationContext context)
             throws JsonParseException {
-        try {
-            return new DateTime(json.getAsString());
-        } catch (IllegalArgumentException e) {
-            // May be it came in formatted as a java.util.Date, so try that
-            Date date = context.deserialize(json, Date.class);
-            return new DateTime(date);
-        }
+            return DateTime.parse(json.getAsString(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

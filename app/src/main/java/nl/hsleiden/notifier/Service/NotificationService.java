@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 
 import nl.hsleiden.notifier.Activity.OverviewActivity;
 import nl.hsleiden.notifier.Model.Notification;
+import nl.hsleiden.notifier.R;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -36,7 +37,7 @@ public class NotificationService extends Service {
 
 //        Create notification layout
         Builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setSmallIcon(notification.icon)
+                .setSmallIcon(R.drawable.ic_feedback_black_24dp)
                 .setContentTitle(notification.title)
                 .setContentText(notification.details)
                 .setPriority(0)

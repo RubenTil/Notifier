@@ -27,10 +27,6 @@ public class Notification extends Model implements Serializable{
     public String details;
 
     @Expose
-    @Column(name ="icon")
-    public int icon;
-
-    @Expose
     @Column(name ="initial_show_time")
     public DateTime initialShowTime;
 
@@ -48,11 +44,10 @@ public class Notification extends Model implements Serializable{
         isEnabled=false;
     }
 
-    public Notification(String title, String details, int icon, DateTime initialShowTime, RepeatMode repeatMode, Boolean isEnabled) {
+    public Notification(String title, String details, DateTime initialShowTime, RepeatMode repeatMode, Boolean isEnabled) {
         super();
         this.title = title;
         this.details = details;
-        this.icon = icon;
         this.initialShowTime = initialShowTime;
         this.repeatMode = repeatMode;
         this.isEnabled = isEnabled;

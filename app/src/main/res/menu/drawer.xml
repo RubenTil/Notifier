@@ -12,14 +12,8 @@
     <item
         android:id="@+id/nav_import"
         android:checked="false"
-        android:title="@string/header_import"
-        android:icon="@drawable/ic_file_download_black_24dp"/>
-
-    <item
-        android:id="@+id/nav_export"
-        android:checked="false"
-        android:title="@string/header_export"
-        android:icon="@drawable/ic_file_upload_black_24dp"/>
+        android:title="@string/header_settings"
+        android:icon="@drawable/ic_settings_black_24dp"/>
 
     </group>
 </menu>
