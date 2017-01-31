@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryVeryLight"
         android:padding="25dp"
         >
         <ImageView
@@ -49,7 +49,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="11dp"
             android:ems="10"
-            android:hint="Title"
+            android:hint="@string/view_title_hint"
             android:inputType="textPersonName"
             android:textSize="18sp" />
 
@@ -77,14 +77,6 @@
             android:onClick="showDatePickerDialog"
             android:text="dd/MM/YYYY HH:mm" />
 
-        <Spinner
-            android:id="@+id/repeatOptionsDropDown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/dateTimeField"
-            android:layout_marginTop="16dp" />
-
         <Switch
             android:text="@string/view_enable"
             android:layout_width="wrap_content"
@@ -94,5 +86,14 @@
             android:layout_alignEnd="@+id/dateTimeField"
             android:textSize="18sp"
             android:fontFamily="sans-serif-medium" />
+
+        <Spinner
+            android:id="@+id/repeatOptionsDropDown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/dateTimeField"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/dateTimeField"
+            android:layout_marginEnd="10dp"/>
     </RelativeLayout>
 </LinearLayout>

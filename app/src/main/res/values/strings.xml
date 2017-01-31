@@ -10,10 +10,12 @@
 
     <!--Strings used in views-->
     <string name="view_save">Save</string>
-    <string name="view_enable">Enable </string>
+    <string name="view_enable">Inschakelen</string>
     <string name="view_import">Importeren</string>
     <string name="view_export">Exporteren</string>
-    <string name="view_url_hint">Server IP of URL</string>
+    <string name="view_url_hint">Hostadres APIL</string>
+    <string name="view_title_hint">Titel</string>
+    <string name="view_details_hint">Details</string>
 
 
     <!--RepeatModes-->
